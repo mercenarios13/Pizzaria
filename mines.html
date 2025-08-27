@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mines - Jogo de Apostas Fictícias</title>
+<title>Mines - Jogo Fictício</title>
 <style>
 body {
     display: flex;
@@ -28,6 +28,7 @@ header {
     align-items: center;
     gap: 10px;
     margin: 15px 0;
+    flex-wrap: wrap;
 }
 #tabuleiro {
     display: grid;
@@ -96,14 +97,16 @@ button#apostar.red {
 let saldo = 1000;
 let acertos = 0;
 let jogoAtivo = false;
+let casas = [];
+let valorAposta = 0;
 
 const tabuleiro = document.getElementById('tabuleiro');
 const apostarBtn = document.getElementById('apostar');
 const mensagem = document.getElementById('mensagem');
 const acertosDisplay = document.getElementById('acertos');
-
 const valorApostaInput = document.getElementById('aposta');
 const bombasInput = document.getElementById('bombas');
+const saldoDisplay = document.getElementById('saldo');
 
 function criarTabuleiro(){
     tabuleiro.innerHTML = '';
@@ -111,12 +114,10 @@ function criarTabuleiro(){
     acertosDisplay.textContent = `Acertos: ${acertos}`;
     jogoAtivo = true;
 
-    const valorAposta = parseInt(valorApostaInput.value);
     const numBombas = parseInt(bombasInput.value);
-    
-    // Criar array de 25 posições
     const totalCasas = 25;
-    const casas = Array(totalCasas).fill('estrela'); // inicializa todas com estrela
+    casas = Array(totalCasas).fill('estrela');
+
     let bombasColocadas = 0;
     while(bombasColocadas < numBombas){
         let idx = Math.floor(Math.random() * totalCasas);
@@ -126,7 +127,6 @@ function criarTabuleiro(){
         }
     }
 
-    // Criar botões
     for(let i=0;i<totalCasas;i++){
         const btn = document.createElement('button');
         btn.dataset.tipo = casas[i];
@@ -140,41 +140,51 @@ function criarTabuleiro(){
                 btn.disabled = true;
             } else {
                 btn.textContent = '💣';
-                mensagem.textContent = "Você perdeu!";
+                mensagem.textContent = "💥 Você perdeu tudo!";
                 jogoAtivo = false;
-                // desabilitar todos os botões
-                Array.from(tabuleiro.children).forEach(b=>b.disabled=true);
+                apostarBtn.textContent = "Apostar";
+                apostarBtn.classList.remove('red');
+                // revela todas
+                Array.from(tabuleiro.children).forEach(b=>{
+                    b.textContent = b.dataset.tipo === 'bomba' ? '💣' : '⭐';
+                    b.disabled = true;
+                });
             }
         });
         tabuleiro.appendChild(btn);
     }
 }
 
-// Evento do botão apostar/sacar
 apostarBtn.addEventListener('click', ()=>{
-    const valorAposta = parseInt(valorApostaInput.value);
+    valorAposta = parseInt(valorApostaInput.value);
+    
     if(apostarBtn.textContent === "Apostar"){
         if(saldo < valorAposta){
             mensagem.textContent = "Saldo insuficiente!";
             return;
         }
         saldo -= valorAposta;
-        document.getElementById('saldo').textContent = saldo;
+        saldoDisplay.textContent = saldo;
 
         apostarBtn.textContent = "Sacar";
         apostarBtn.classList.add('red');
-
         criarTabuleiro();
         mensagem.textContent = "Clique em um quadrado para revelar!";
     } else {
-        // Sacar: soma 20% do valor da aposta para cada acerto
         const ganho = valorAposta * 0.2 * acertos;
-        saldo += ganho;
-        document.getElementById('saldo').textContent = saldo;
-        mensagem.textContent = `Você sacou ${ganho} créditos!`;
+        saldo += valorAposta + ganho;
+        saldoDisplay.textContent = saldo;
+        mensagem.textContent = `✅ Você sacou ${valorAposta+ganho} créditos!`;
+        
         apostarBtn.textContent = "Apostar";
         apostarBtn.classList.remove('red');
         jogoAtivo = false;
+
+        // revela todas
+        Array.from(tabuleiro.children).forEach(b=>{
+            b.textContent = b.dataset.tipo === 'bomba' ? '💣' : '⭐';
+            b.disabled = true;
+        });
     }
 });
 </script>

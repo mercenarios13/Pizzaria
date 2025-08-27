@@ -1,170 +1,463 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tigrinho - BetFictício</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tigrinho (Fake Money) — BetFictício</title>
 <style>
-#slots {
-  display: grid;
-  grid-template-columns: repeat(3, 80px);
-  grid-template-rows: repeat(3, 80px);
-  gap: 10px;
-  justify-content: center;
-  margin: 20px 0;
-  font-size: 2rem;
-}
-.slot-cell {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#1b1b2f;
-  border: 2px solid #00ffcc;
-  border-radius: 8px;
-  transition: transform 0.2s;
-  height: 80px;
-}
-.slot-cell.win {
-  background: #ffcc00;
-  color: #000;
-  transform: scale(1.2);
-}
+  :root{
+    --bg1:#0f1724; --bg2:#081021;
+    --neon:#00ffd1; --accent:#ffcc00; --card:#12131a;
+    --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:#e6eef6;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:20px;
+  }
 
-.aposta-container {
-  margin: 15px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
+  .app{
+    width:100%;
+    max-width:980px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;
+    padding:18px;
+    box-shadow: 0 10px 40px rgba(2,6,23,0.7), 0 0 30px rgba(0,255,209,0.03) inset;
+    border: 1px solid rgba(255,255,255,0.03);
+  }
 
-#aposta {
-  width: 100px;
-  padding: 10px;
-  border: 2px solid #00ffcc;
-  border-radius: 8px;
-  background: #1b1b2f;
-  color: #00ffcc;
-  font-weight: bold;
-  text-align: center;
-  transition: 0.3s;
-}
+  header{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  h1{font-size:20px;margin:0;color:var(--accent);text-shadow:0 0 8px rgba(255,204,0,0.12)}
+  .saldo{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    font-weight:700;
+    color:var(--neon);
+  }
+  .saldo strong{font-size:1.1rem}
 
-#aposta:focus {
-  outline: none;
-  border-color: #ffcc00;
-  box-shadow: 0 0 10px #ffcc00;
-}
+  .top-controls{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
 
-#girar {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #00ffcc, #ffcc00);
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
+  .panel{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:10px;
+    padding:12px;
+    border:1px solid rgba(0,255,209,0.06);
+    min-width:220px;
+  }
 
-#girar:hover {
-  background: linear-gradient(90deg, #ffcc00, #00ffcc);
-  transform: scale(1.05);
-}
+  .left{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+  }
+
+  .reels-wrap{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    padding:12px;
+  }
+
+  /* reels */
+  .reel{
+    width:110px;
+    height:110px;
+    background:var(--card);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border: 2px solid rgba(0,255,209,0.06);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 16px rgba(0,255,209,0.02) inset;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .reel .cell{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:48px;
+    transition: transform 200ms ease;
+  }
+
+  /* win effect */
+  .reel.win{
+    animation: glow 900ms ease-in-out;
+    border-color: rgba(255,204,0,0.9);
+    box-shadow: 0 0 28px rgba(255,204,0,0.12), 0 6px 20px rgba(0,0,0,0.6);
+  }
+  @keyframes glow{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.08)}
+    100%{transform:scale(1)}
+  }
+
+  /* controls panel */
+  label{display:block;font-size:12px;color:#a8d7cc;margin-bottom:6px}
+  input[type=number], input[type=range], select {
+    width:100%;
+    padding:8px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.06);
+    background: #0b0c10;
+    color:var(--neon);
+    font-weight:600;
+  }
+  .row{display:flex;gap:8px}
+  .col{display:flex;flex-direction:column;gap:8px}
+
+  .btn{
+    background: linear-gradient(90deg,var(--neon),var(--accent));
+    color:#000;
+    border:none;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.45), 0 0 18px rgba(0,255,209,0.06);
+  }
+  .btn.secondary{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color:#d8f6ef;
+    font-weight:700;
+  }
+
+  .paytable{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#cfeee7}
+  .paytable .item{display:flex;justify-content:space-between;padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.01)}
+  .footer{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:#9adfca;font-size:13px}
+
+  /* responsive */
+  @media (max-width:880px){
+    .app{padding:12px}
+    .reels-wrap{gap:10px}
+    .reel{width:86px;height:86px}
+    .reel .cell{font-size:36px}
+    .left{flex-direction:column;gap:10px}
+  }
 </style>
 </head>
 <body>
-<header>
-<h1>Tigrinho (Slots)</h1>
-<a href="index.html">⬅ Voltar</a>
-<div id="saldo-container">💰 Saldo: <span id="saldo">0</span> créditos</div>
-</header>
+  <div class="app" role="application" aria-label="Tigrinho slots com dinheiro fictício">
+    <header>
+      <h1>🐯 Tigrinho — Fake Money</h1>
+      <div class="saldo">Saldo: <strong id="balance">1000</strong> 💎</div>
+    </header>
 
-<main>
-<p>Escolha o valor da aposta e gire para tentar a sorte!</p>
-<div class="aposta-container">
-  <label for="aposta">Valor da aposta:</label>
-  <input type="number" id="aposta" value="50" min="10" max="1000" step="10">
-</div>
+    <div class="top-controls">
+      <div class="panel col" style="min-width:260px">
+        <label for="bet">Valor da aposta</label>
+        <input id="bet" type="number" min="1" step="1" value="50" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="maxBet" class="btn secondary" title="Aposta máxima">Max</button>
+          <button id="minBet" class="btn secondary" title="Aposta mínima">Min</button>
+          <button id="resetBalance" class="btn secondary" title="Reset saldo">Reset</button>
+        </div>
+        <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+        <label for="winChance">Fairness (chance de vitória)</label>
+        <input id="winChance" type="range" min="1" max="80" value="20" />
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#9adfca;margin-top:6px">
+          <span>1%</span><span id="chanceLabel">20%</span><span>80%</span>
+        </div>
+      </div>
 
-<div id="slots">
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-  <div class="slot-cell">🍒</div>
-</div>
-<button id="girar">Girar</button>
-<p id="mensagem"></p>
-</main>
+      <div class="reels-wrap" aria-hidden="false">
+        <div class="reel" id="reel0"><div class="cell">🍒</div></div>
+        <div class="reel" id="reel1"><div class="cell">🍒</div></div>
+        <div class="reel" id="reel2"><div class="cell">🍒</div></div>
+      </div>
+
+      <div class="panel col" style="min-width:240px">
+        <label>Comandos</label>
+        <div style="display:flex;gap:8px">
+          <button id="spin" class="btn">GIRAR</button>
+          <button id="auto" class="btn secondary">Auto</button>
+        </div>
+
+        <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+
+        <div class="paytable">
+          <div class="item"><div>🐯 x3</div><div>10×</div></div>
+          <div class="item"><div>🍇 x3</div><div>5×</div></div>
+          <div class="item"><div>🍉 x3</div><div>3×</div></div>
+          <div class="item"><div>🍊 x3</div><div>2×</div></div>
+          <div class="item"><div>Qualquer 2 iguais</div><div>1.5×</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
+      <div style="flex:1">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="font-size:14px;color:#a8d7cc">Status:</div>
+          <div id="status" style="font-weight:700;color:#e6fef5">Pronto</div>
+        </div>
+      </div>
+      <div style="flex:0 0 360px">
+        <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end">
+          <div style="text-align:right;font-size:13px;color:#cdefe0">
+            Ganho (último): <span id="lastWin">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>💡 Créditos fictícios — apenas para treino</div>
+      <div style="opacity:0.9">versão demo</div>
+    </div>
+  </div>
 
 <script>
-let saldo = localStorage.getItem('saldo') ? parseInt(localStorage.getItem('saldo')) : 1000;
-document.getElementById('saldo').textContent = saldo;
-const slots = document.querySelectorAll('.slot-cell');
-const msg = document.getElementById('mensagem');
-const inputAposta = document.getElementById('aposta');
-const girarBtn = document.getElementById('girar');
-const symbols = ['🍒','🍋','🍉','🍇','🐯'];
+/*
+  Tigrinho (fake money) - single file
+  - Three reels animated by JS (interval switching)
+  - Win chance adjustable (controls whether final result is winning)
+  - Paytable with multipliers
+  - Balance stored in localStorage
+  - Auto spin mode
+*/
 
-function gerarResultado(ganhar=false){
-    if(ganhar){
-        return Array(9).fill('🐯');
-    } else {
-        return Array(9).fill(0).map(()=>symbols[Math.floor(Math.random()*symbols.length)]);
-    }
+/* ---------- Config & state ---------- */
+const SYMBOLS = ['🍒','🍊','🍉','🍇','🐯']; // last is highest value
+const PAYTABLE = {
+  '🐯': 10,
+  '🍇': 5,
+  '🍉': 3,
+  '🍊': 2,
+  '🍒': 1.5
+};
+const BALANCE_KEY = 'tigrinho_balance_v1';
+
+let balance = parseInt(localStorage.getItem(BALANCE_KEY) || '1000', 10);
+let spinning = false;
+let autoMode = false;
+
+/* ---------- UI refs ---------- */
+const balanceEl = document.getElementById('balance');
+const betInput = document.getElementById('bet');
+const spinBtn = document.getElementById('spin');
+const autoBtn = document.getElementById('auto');
+const reelEls = [document.getElementById('reel0'), document.getElementById('reel1'), document.getElementById('reel2')];
+const statusEl = document.getElementById('status');
+const lastWinEl = document.getElementById('lastWin');
+const winChanceEl = document.getElementById('winChance');
+const chanceLabel = document.getElementById('chanceLabel');
+const maxBtn = document.getElementById('maxBet');
+const minBtn = document.getElementById('minBet');
+const resetBtn = document.getElementById('resetBalance');
+
+/* update initial */
+balanceEl.textContent = balance;
+chanceLabel.textContent = winChanceEl.value + '%';
+
+/* helpers */
+function setStatus(txt, color){
+  statusEl.textContent = txt;
+  statusEl.style.color = color || '#e6fef5';
+}
+function saveBalance(){
+  localStorage.setItem(BALANCE_KEY, String(balance));
+  balanceEl.textContent = balance;
 }
 
-function sleep(ms){return new Promise(resolve => setTimeout(resolve, ms));}
+/* spin logic:
+   - remove balance immediately by bet
+   - decide if this spin will be 'winning' using winChance
+   - if winning: pick a symbol with weighted chance (higher for common or rarer?) — here simple uniform
+   - animate reels by changing symbols quickly
+   - stop reels sequentially and display final symbols
+   - calculate payout: matching 3 same -> PAYTABLE[symbol] * bet
+   - partial wins: 2 same -> 1.5x bet
+*/
+function randomInt(max){ return Math.floor(Math.random()*max); }
+function randomSymbol(){ return SYMBOLS[randomInt(SYMBOLS.length)]; }
 
-girarBtn.addEventListener('click', async ()=>{
-    let aposta = parseInt(inputAposta.value);
-    if(saldo < aposta){ 
-        msg.textContent='Saldo insuficiente'; 
-        return; 
+function determineFinalResult(winChancePercent){
+  // returns array of 3 symbols representing final result
+  const willWin = (Math.random() * 100) < winChancePercent;
+  if(willWin){
+    // choose winning symbol biased to nicer wins? keep uniform among symbols for demo
+    const sym = SYMBOLS[randomInt(SYMBOLS.length)];
+    return [sym, sym, sym];
+  } else {
+    // ensure NOT all three equal; we can still have two equal (partial win) or none equal
+    let a = randomSymbol();
+    let b = randomSymbol();
+    let c = randomSymbol();
+    // if accidentally all equal, force variation
+    if(a === b && b === c){
+      // change c
+      do { c = randomSymbol(); } while(c === a);
     }
-    saldo -= aposta; 
-    atualizarSaldo(saldo); 
-    msg.textContent='';
+    return [a,b,c];
+  }
+}
 
-    // 20% chance de vitória
-    const ganhar = Math.random()<0.2;
-    const resultadoFinal = gerarResultado(ganhar);
+/* animate spin */
+async function spinOnce(bet){
+  if(spinning) return;
+  if(bet <= 0) { setStatus('Insira uma aposta válida', 'orange'); return; }
+  if(bet > balance){ setStatus('Saldo insuficiente', 'red'); return; }
 
-    // Animação de giro
-    for(let round=0; round<15; round++){
-        slots.forEach(cell=>{
-            cell.textContent = symbols[Math.floor(Math.random()*symbols.length)];
-        });
-        await sleep(50);
+  // take bet
+  balance -= bet;
+  saveBalance();
+  setStatus('Girando...', '#9adfca');
+  spinning = true;
+  spinBtn.disabled = true;
+  autoBtn.disabled = true;
+
+  // win chance
+  const winChance = parseFloat(winChanceEl.value);
+
+  // decide final result
+  const final = determineFinalResult(winChance);
+
+  // spinning animation: change symbols rapidly, stop reels in sequence
+  const spinIntervals = [];
+  // start rapid change
+  for(let r=0;r<3;r++){
+    spinIntervals[r] = setInterval(()=>{
+      const s = SYMBOLS[randomInt(SYMBOLS.length)];
+      reelEls[r].querySelector('.cell').textContent = s;
+    }, 60 + r*10); // slight difference per reel
+  }
+
+  // stop them sequentially
+  const stopDelays = [600, 1000, 1400]; // ms
+  for(let r=0;r<3;r++){
+    await new Promise(resolve => setTimeout(resolve, stopDelays[r]));
+    clearInterval(spinIntervals[r]);
+    // set final symbol for this reel
+    reelEls[r].querySelector('.cell').textContent = final[r];
+    // small flash if win later
+  }
+
+  // compute payout
+  let winAmount = 0;
+  // three equal
+  if(final[0] === final[1] && final[1] === final[2]){
+    winAmount = Math.round(bet * (PAYTABLE[final[0]] || 1));
+    // highlight reels
+    reelEls.forEach(el => el.classList.add('win'));
+  } else if(final[0] === final[1] || final[1] === final[2] || final[0] === final[2]){
+    // two equal -> partial payout 1.5x
+    winAmount = Math.round(bet * 1.5);
+    // highlight reels that matched
+    for(let i=0;i<3;i++){
+      const a = final[i];
+      // add win to reels that are part of pair
+      if(final.filter(x => x===a).length >= 2) reelEls[i].classList.add('win');
     }
+  } else {
+    winAmount = 0;
+  }
 
-    // Resultado final
-    slots.forEach((cell,i)=>{
-        cell.textContent = resultadoFinal[i];
-        cell.classList.remove('win');
-    });
+  // apply win
+  if(winAmount > 0){
+    balance += winAmount;
+    saveBalance();
+    lastWinEl.textContent = winAmount;
+    setStatus('Você ganhou! +' + winAmount, '#00ffcc');
+    // small delay to show glowing reels
+    await new Promise(resolve => setTimeout(resolve, 800));
+  } else {
+    setStatus('Tente novamente', '#ff7b7b');
+    lastWinEl.textContent = 0;
+  }
 
-    // Vitória
-    if(ganhar){
-        let ganho = aposta*5;
-        saldo += ganho;
-        msg.textContent='🎉 Parabéns! Você ganhou '+ganho+' créditos!';
-        slots.forEach(cell=>cell.classList.add('win'));
-        atualizarSaldo(saldo);
-    }
+  // clear win classes
+  reelEls.forEach(el => el.classList.remove('win'));
+
+  spinning = false;
+  spinBtn.disabled = false;
+  autoBtn.disabled = false;
+
+  // auto-spin behavior
+  if(autoMode){
+    // small delay between auto spins
+    setTimeout(()=> {
+      if(autoMode) spinBtn.click();
+    }, 600);
+  }
+}
+
+/* ---------- UI wiring ---------- */
+spinBtn.addEventListener('click', ()=>{
+  const bet = Math.max(1, Math.floor(Number(betInput.value) || 0));
+  betInput.value = bet;
+  spinOnce(bet);
 });
 
-function atualizarSaldo(valor){
-    saldo = valor;
-    document.getElementById('saldo').textContent = saldo;
-    localStorage.setItem('saldo',saldo);
-}
+autoBtn.addEventListener('click', ()=>{
+  autoMode = !autoMode;
+  autoBtn.textContent = autoMode ? 'Stop' : 'Auto';
+  autoBtn.classList.toggle('secondary', !autoMode);
+  if(autoMode){
+    // start auto only if not spinning
+    if(!spinning) spinBtn.click();
+  }
+});
+
+winChanceEl.addEventListener('input', ()=>{
+  chanceLabel.textContent = winChanceEl.value + '%';
+});
+
+maxBtn.addEventListener('click', ()=>{
+  // set to 20% of balance to avoid huge bets by mistake
+  const v = Math.max(1, Math.floor(balance * 0.2));
+  betInput.value = v;
+});
+minBtn.addEventListener('click', ()=>{
+  betInput.value = 1;
+});
+resetBtn.addEventListener('click', ()=>{
+  if(confirm('Resetar saldo para 1000 créditos?')){
+    balance = 1000;
+    saveBalance();
+  }
+});
+
+/* keyboard shortcuts: space to spin */
+document.addEventListener('keydown', (e)=>{
+  if(e.code === 'Space'){
+    e.preventDefault();
+    spinBtn.click();
+  }
+});
+
+/* init */
+saveBalance();
+
 </script>
 </body>
 </html>
