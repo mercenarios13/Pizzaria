@@ -1,0 +1,345 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-04-09T00:00:00.000Z",
+  "__export_source": "chatgpt-insomnia-export",
+  "resources": [
+    {
+      "_id": "wrk_pizzaria",
+      "name": "API Pizzaria Ginno e Silva",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_pizza_1",
+      "name": "POST Pizza 1",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Calabresa\", \"preco\": 31.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_2",
+      "name": "POST Pizza 2",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Portuguesa\", \"preco\": 32.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_3",
+      "name": "POST Pizza 3",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Frango com Catupiry\", \"preco\": 33.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_4",
+      "name": "POST Pizza 4",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Marguerita\", \"preco\": 34.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_5",
+      "name": "POST Pizza 5",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Quatro Queijos\", \"preco\": 35.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_6",
+      "name": "POST Pizza 6",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Pepperoni\", \"preco\": 36.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_7",
+      "name": "POST Pizza 7",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Napolitana\", \"preco\": 37.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_8",
+      "name": "POST Pizza 8",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Baiana\", \"preco\": 38.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_9",
+      "name": "POST Pizza 9",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Vegetariana\", \"preco\": 39.0}"
+      }
+    },
+    {
+      "_id": "req_pizza_10",
+      "name": "POST Pizza 10",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Toscana\", \"preco\": 40.0}"
+      }
+    },
+    {
+      "_id": "req_cliente_1",
+      "name": "POST Cliente 1",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Cliente 1\", \"logradouro\": \"Rua 1\", \"numero\": \"101\", \"telefone\": \"(19) 99999-0001\"}"
+      }
+    },
+    {
+      "_id": "req_cliente_2",
+      "name": "POST Cliente 2",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Cliente 2\", \"logradouro\": \"Rua 2\", \"numero\": \"102\", \"telefone\": \"(19) 99999-0002\"}"
+      }
+    },
+    {
+      "_id": "req_cliente_3",
+      "name": "POST Cliente 3",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Cliente 3\", \"logradouro\": \"Rua 3\", \"numero\": \"103\", \"telefone\": \"(19) 99999-0003\"}"
+      }
+    },
+    {
+      "_id": "req_cliente_4",
+      "name": "POST Cliente 4",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Cliente 4\", \"logradouro\": \"Rua 4\", \"numero\": \"104\", \"telefone\": \"(19) 99999-0004\"}"
+      }
+    },
+    {
+      "_id": "req_cliente_5",
+      "name": "POST Cliente 5",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Cliente 5\", \"logradouro\": \"Rua 5\", \"numero\": \"105\", \"telefone\": \"(19) 99999-0005\"}"
+      }
+    },
+    {
+      "_id": "req_pedido_1",
+      "name": "POST Pedido 1",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"clienteId\": 1, \"pizzas\": [1]}"
+      }
+    },
+    {
+      "_id": "req_pedido_2",
+      "name": "POST Pedido 2",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"clienteId\": 2, \"pizzas\": [2, 3]}"
+      }
+    },
+    {
+      "_id": "req_pedido_3",
+      "name": "POST Pedido 3",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"clienteId\": 3, \"pizzas\": [4, 5, 6]}"
+      }
+    },
+    {
+      "_id": "req_pedido_4",
+      "name": "POST Pedido 4",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"clienteId\": 4, \"pizzas\": [7]}"
+      }
+    },
+    {
+      "_id": "req_pedido_5",
+      "name": "POST Pedido 5",
+      "method": "POST",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"clienteId\": 5, \"pizzas\": [8, 9]}"
+      }
+    },
+    {
+      "_id": "req_get_pedido_1",
+      "name": "GET Pedido 1 (com cliente e pizzas)",
+      "method": "GET",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos/1"
+    },
+    {
+      "_id": "req_get_all_pizzas",
+      "name": "GET Todas as Pizzas",
+      "method": "GET",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas"
+    },
+    {
+      "_id": "req_get_all_clientes",
+      "name": "GET Todas as Clientes",
+      "method": "GET",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes"
+    },
+    {
+      "_id": "req_get_all_pedidos",
+      "name": "GET Todas as Pedidos",
+      "method": "GET",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos"
+    },
+    {
+      "_id": "req_put_pizza_1",
+      "name": "PUT Pizza 1",
+      "method": "PUT",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas/1",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Pizza Atualizado\", \"preco\": 45.0, \"logradouro\": \"Atualizado\", \"numero\": \"999\", \"telefone\": \"(19) 98888-8888\", \"pizzas\": null}"
+      }
+    },
+    {
+      "_id": "req_delete_pizza_1",
+      "name": "DELETE Pizza 1",
+      "method": "DELETE",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pizzas/1"
+    },
+    {
+      "_id": "req_put_cliente_1",
+      "name": "PUT Cliente 1",
+      "method": "PUT",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes/1",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Cliente Atualizado\", \"preco\": null, \"logradouro\": \"Atualizado\", \"numero\": \"999\", \"telefone\": \"(19) 98888-8888\", \"pizzas\": null}"
+      }
+    },
+    {
+      "_id": "req_delete_cliente_1",
+      "name": "DELETE Cliente 1",
+      "method": "DELETE",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/clientes/1"
+    },
+    {
+      "_id": "req_put_pedido_1",
+      "name": "PUT Pedido 1",
+      "method": "PUT",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos/1",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"nome\": \"Pedido Atualizado\", \"preco\": null, \"logradouro\": \"Atualizado\", \"numero\": \"999\", \"telefone\": \"(19) 98888-8888\", \"pizzas\": [1, 2]}"
+      }
+    },
+    {
+      "_id": "req_delete_pedido_1",
+      "name": "DELETE Pedido 1",
+      "method": "DELETE",
+      "parentId": "wrk_pizzaria",
+      "_type": "request",
+      "url": "http://localhost:3000/pedidos/1"
+    }
+  ]
+}
