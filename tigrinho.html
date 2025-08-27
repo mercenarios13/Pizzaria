@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tigrinho - BetFictício</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#slots {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  grid-template-rows: repeat(3, 80px);
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+  font-size: 2rem;
+}
+.slot-cell {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1b1b2f;
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+  transition: transform 0.2s;
+  height: 80px;
+}
+.slot-cell.win {
+  background: #ffcc00;
+  color: #000;
+  transform: scale(1.2);
+}
+
+.aposta-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#aposta {
+  width: 100px;
+  padding: 10px;
+  border: 2px solid #00ffcc;
+  border-radius: 8px;
+  background: #1b1b2f;
+  color: #00ffcc;
+  font-weight: bold;
+  text-align: center;
+  transition: 0.3s;
+}
+
+#aposta:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 10px #ffcc00;
+}
+
+#girar {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #00ffcc, #ffcc00);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#girar:hover {
+  background: linear-gradient(90deg, #ffcc00, #00ffcc);
+  transform: scale(1.05);
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Tigrinho (Slots)</h1>
+<a href="index.html">⬅ Voltar</a>
+<div id="saldo-container">💰 Saldo: <span id="saldo">0</span> créditos</div>
+</header>
+
+<main>
+<p>Escolha o valor da aposta e gire para tentar a sorte!</p>
+<div class="aposta-container">
+  <label for="aposta">Valor da aposta:</label>
+  <input type="number" id="aposta" value="50" min="10" max="1000" step="10">
+</div>
+
+<div id="slots">
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+  <div class="slot-cell">🍒</div>
+</div>
+<button id="girar">Girar</button>
+<p id="mensagem"></p>
+</main>
+
+<script>
+let saldo = localStorage.getItem('saldo') ? parseInt(localStorage.getItem('saldo')) : 1000;
+document.getElementById('saldo').textContent = saldo;
+const slots = document.querySelectorAll('.slot-cell');
+const msg = document.getElementById('mensagem');
+const inputAposta = document.getElementById('aposta');
+const girarBtn = document.getElementById('girar');
+const symbols = ['🍒','🍋','🍉','🍇','🐯'];
+
+function gerarResultado(ganhar=false){
+    if(ganhar){
+        return Array(9).fill('🐯');
+    } else {
+        return Array(9).fill(0).map(()=>symbols[Math.floor(Math.random()*symbols.length)]);
+    }
+}
+
+function sleep(ms){return new Promise(resolve => setTimeout(resolve, ms));}
+
+girarBtn.addEventListener('click', async ()=>{
+    let aposta = parseInt(inputAposta.value);
+    if(saldo < aposta){ 
+        msg.textContent='Saldo insuficiente'; 
+        return; 
+    }
+    saldo -= aposta; 
+    atualizarSaldo(saldo); 
+    msg.textContent='';
+
+    // 20% chance de vitória
+    const ganhar = Math.random()<0.2;
+    const resultadoFinal = gerarResultado(ganhar);
+
+    // Animação de giro
+    for(let round=0; round<15; round++){
+        slots.forEach(cell=>{
+            cell.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+        });
+        await sleep(50);
+    }
+
+    // Resultado final
+    slots.forEach((cell,i)=>{
+        cell.textContent = resultadoFinal[i];
+        cell.classList.remove('win');
+    });
+
+    // Vitória
+    if(ganhar){
+        let ganho = aposta*5;
+        saldo += ganho;
+        msg.textContent='🎉 Parabéns! Você ganhou '+ganho+' créditos!';
+        slots.forEach(cell=>cell.classList.add('win'));
+        atualizarSaldo(saldo);
+    }
+});
+
+function atualizarSaldo(valor){
+    saldo = valor;
+    document.getElementById('saldo').textContent = saldo;
+    localStorage.setItem('saldo',saldo);
+}
+</script>
+</body>
+</html>

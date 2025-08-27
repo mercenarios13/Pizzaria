@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mines - BetFictício</title>
+<style>
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background: #1b1b2f;
+    color: #00ffcc;
+    min-height: 100vh;
+    margin: 0;
+}
+header {
+    text-align: center;
+    padding: 20px;
+    background: #003366;
+    color: #fff;
+    width: 100%;
+}
+#opcoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+#tabuleiro {
+    display: grid;
+    grid-template-columns: repeat(5, 80px);
+    gap: 10px;
+    margin: 20px auto;
+}
+#tabuleiro button {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+    border: 2px solid #00ffcc;
+    border-radius: 8px;
+    background: #1b1b2f;
+    color: #00ffcc;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+#tabuleiro button:disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+button#apostar {
+    padding: 10px 20px;
+    border:none;
+    border-radius:8px;
+    background: linear-gradient(90deg,#00ffcc,#ffcc00);
+    color:#000;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+button#apostar.red {
+    background: #ff4d4d;
+    color: #fff;
+}
+#mensagem { text-align:center; margin-top:10px; font-weight:bold;}
+#acertos { margin-top:10px; font-size:1.1rem; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Mines</h1>
+<div id="saldo-container">💰 Saldo: <span id="saldo">1000</span> créditos</div>
+</header>
+
+<div id="opcoes">
+    <label for="aposta">Valor da aposta:</label>
+    <input type="number" id="aposta" value="50" min="10" max="1000" step="10">
+    
+    <label for="bombas">Número de bombas:</label>
+    <input type="number" id="bombas" value="5" min="1" max="24">
+    
+    <button id="apostar">Apostar</button>
+</div>
+
+<div id="tabuleiro"></div>
+<p id="mensagem"></p>
+<p id="acertos">Acertos: 0</p>
+
+<script>
+let saldo = 1000;
+let acertos = 0;
+let jogoAtivo = false;
+
+const tabuleiro = document.getElementById('tabuleiro');
+const apostarBtn = document.getElementById('apostar');
+const mensagem = document.getElementById('mensagem');
+const acertosDisplay = document.getElementById('acertos');
+
+const valorApostaInput = document.getElementById('aposta');
+const bombasInput = document.getElementById('bombas');
+
+function criarTabuleiro(){
+    tabuleiro.innerHTML = '';
+    acertos = 0;
+    acertosDisplay.textContent = `Acertos: ${acertos}`;
+    jogoAtivo = true;
+
+    const valorAposta = parseInt(valorApostaInput.value);
+    const numBombas = parseInt(bombasInput.value);
+    
+    // Criar array de 25 posições
+    const totalCasas = 25;
+    const casas = Array(totalCasas).fill('estrela'); // inicializa todas com estrela
+    let bombasColocadas = 0;
+    while(bombasColocadas < numBombas){
+        let idx = Math.floor(Math.random() * totalCasas);
+        if(casas[idx] !== 'bomba'){
+            casas[idx] = 'bomba';
+            bombasColocadas++;
+        }
+    }
+
+    // Criar botões
+    for(let i=0;i<totalCasas;i++){
+        const btn = document.createElement('button');
+        btn.dataset.tipo = casas[i];
+        btn.addEventListener('click', ()=>{
+            if(!jogoAtivo) return;
+
+            if(btn.dataset.tipo === 'estrela'){
+                btn.textContent = '⭐';
+                acertos++;
+                acertosDisplay.textContent = `Acertos: ${acertos}`;
+                btn.disabled = true;
+            } else {
+                btn.textContent = '💣';
+                mensagem.textContent = "Você perdeu!";
+                jogoAtivo = false;
+                // desabilitar todos os botões
+                Array.from(tabuleiro.children).forEach(b=>b.disabled=true);
+            }
+        });
+        tabuleiro.appendChild(btn);
+    }
+}
+
+// Evento do botão apostar/sacar
+apostarBtn.addEventListener('click', ()=>{
+    const valorAposta = parseInt(valorApostaInput.value);
+    if(apostarBtn.textContent === "Apostar"){
+        if(saldo < valorAposta){
+            mensagem.textContent = "Saldo insuficiente!";
+            return;
+        }
+        saldo -= valorAposta;
+        document.getElementById('saldo').textContent = saldo;
+
+        apostarBtn.textContent = "Sacar";
+        apostarBtn.classList.add('red');
+
+        criarTabuleiro();
+        mensagem.textContent = "Clique em um quadrado para revelar!";
+    } else {
+        // Sacar: soma 20% do valor da aposta para cada acerto
+        const ganho = valorAposta * 0.2 * acertos;
+        saldo += ganho;
+        document.getElementById('saldo').textContent = saldo;
+        mensagem.textContent = `Você sacou ${ganho} créditos!`;
+        apostarBtn.textContent = "Apostar";
+        apostarBtn.classList.remove('red');
+        jogoAtivo = false;
+    }
+});
+</script>
+
+</body>
+</html>

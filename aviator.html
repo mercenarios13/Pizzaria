@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviator - BetFictício</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<h1>Aviator</h1>
+<a href="index.html">⬅ Voltar</a>
+<div id="saldo-container">💰 Saldo: <span id="saldo">0</span> créditos</div>
+</header>
+
+<main style="position:relative; height:400px;">
+<img id="aviator-plane" src="https://cdn-icons-png.flaticon.com/512/58/58641.png" alt="Avião">
+<p>Multiplicador: <span id="mult">1.0x</span></p>
+<button id="apostar">Apostar 50 créditos</button>
+<button id="sacar" disabled>Sacar</button>
+<p id="mensagem"></p>
+</main>
+
+<script>
+let saldo = localStorage.getItem('saldo') ? parseInt(localStorage.getItem('saldo')) : 1000;
+document.getElementById('saldo').textContent = saldo;
+const multEl = document.getElementById('mult');
+const msg = document.getElementById('mensagem');
+const plane = document.getElementById('aviator-plane');
+let mult=1, intervalo, valorAposta=0, altura=0;
+
+document.getElementById('apostar').addEventListener('click',()=>{
+if(saldo<50){msg.textContent='Saldo insuficiente'; return;}
+valorAposta=50; saldo-=50; atualizarSaldo(saldo);
+mult=1; altura=0; plane.style.bottom='0px'; multEl.textContent='1.0x'; msg.textContent='';
+document.getElementById('sacar').disabled=false;
+intervalo=setInterval(()=>{
+mult+=(Math.random()*0.2); mult=Math.round(mult*10)/10; multEl.textContent=mult+'x';
+altura+=10; plane.style.bottom=altura+'px';
+if(Math.random()<0.05){clearInterval(intervalo); msg.textContent='O avião caiu! Você perdeu!'; document.getElementById('sacar').disabled=true;
+plane.style.transform='rotate(180deg)'; setTimeout(()=>plane.style.bottom='0px',1000);}
+},300);
+});
+
+document.getElementById('sacar').addEventListener('click',()=>{
+clearInterval(intervalo); saldo+=Math.round(valorAposta*mult); atualizarSaldo(saldo);
+msg.textContent='Você sacou '+Math.round(valorAposta*mult)+' créditos!'; document.getElementById('sacar').disabled=true;
+plane.style.bottom='0px'; plane.style.transform='rotate(0deg)';
+});
+
+function atualizarSaldo(valor){saldo=valor;document.getElementById('saldo').textContent=saldo;localStorage.setItem('saldo',saldo);}
+</script>
+</body>
+</html>
